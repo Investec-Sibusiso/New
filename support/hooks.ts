@@ -5,17 +5,15 @@ import { chromium } from '@playwright/test';
 setDefaultTimeout(80 * 1000); // increase timeout
 
 Before(async function () {
-  const browser = await chromium.launch({
-    headless: true,        // MUST be true in Codespaces
-    args: ['--no-sandbox'] 
+  this.browser = await chromium.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-dev-shm-usage']
   });
 
-  const page = await browser.newPage();
+  const context = await this.browser.newContext();
+  this.page = await context.newPage();
 
-  this.browser = browser;
-  this.page = page;
-
-  console.log('Browser launched (headless)');
+  console.log('Browser launched (stable)');
 });
 
 
