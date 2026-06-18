@@ -53,3 +53,20 @@ Then(/^error message should be displayed$/, async function () {
   const error = await loginPageInstance.getErrorMessage();
   expect(error).toBeTruthy();
 });
+
+Then(/^user clicks on My Team$/, async function () {
+  console.log('THEN STEP');
+
+  const myTeamButton = this.page.getByRole('link', { name: 'My Team' });
+  await myTeamButton.waitFor({ state: 'visible', timeout: 15000 });
+  await myTeamButton.click();
+});
+
+Then(/^user should see My Team page$/, async function () {
+  console.log('THEN STEP');
+
+  const myTeamHeader = this.page.getByRole('heading', { name: 'My Team' });
+  await myTeamHeader.waitFor({ state: 'visible', timeout: 15000 });
+  const headerText = await myTeamHeader.innerText();
+  expect(headerText).toBe('My Team');
+});
