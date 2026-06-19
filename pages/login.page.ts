@@ -26,7 +26,7 @@ export class loginPage {
     // DEBUG screenshot
     await this.page.screenshot({ path: '01-before-username.png', fullPage: true });
 
-    console.log('🔍 Locating username field...');
+    console.log('Locating username field...');
 
     // NOT generic input anymore
     const usernameField = this.page.locator('input[type="text"]');
