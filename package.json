@@ -1,22 +1,10 @@
+
 {
-  "name": "test-automation",
+  "name": "new",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --parallel 2"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "@playwright/test": "^1.61.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
-  },
-  "dependencies": {
-    "@cucumber/cucumber": "^13.0.0",
-    "cucumber-html-reporter": "^7.2.0"
+    "test": "cucumber-js --parallel 2",
+    "test:nonprod": "bru run bruno/collections --env bruno/env/dev.json"
   }
 }
+

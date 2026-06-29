@@ -1,28 +1,18 @@
 
 import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
-import { chromium } from '@playwright/test';
 
-setDefaultTimeout(80 * 1000); // increase timeout
+// Increase timeout (VERY IMPORTANT)
+setDefaultTimeout(60000);
 
 Before(async function () {
-  this.browser = await chromium.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-dev-shm-usage']
-  });
+  console.log("Before hook running...");
 
-  const context = await this.browser.newContext();
-  this.page = await context.newPage();
-
-  console.log('Browser launched (stable)');
+  await this.init();
 });
 
+After(async function () {
+  console.log("After hook running...");
 
-After(async function (scenario) {
-  if (scenario.result?.status === 'FAILED') {
-    await this.page.screenshot({ path: `error.png`, fullPage: true });
-  }
-
-  if (this.browser) {
-    await this.browser.close();
-  }
+  await this.close();
 });
+``

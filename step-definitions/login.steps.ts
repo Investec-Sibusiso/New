@@ -2,6 +2,8 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { loginPage as LoginPageClass } from '../pages/login.page';
 import { expect, type Page } from '@playwright/test';
+import { OTPService } from '../utils/otp.service';
+
 
 let loginPageInstance: LoginPageClass;
 
@@ -61,3 +63,42 @@ Then(/^user should see My Team page$/, async function () {
   const headerText = await myTeamHeader.innerText();
   expect(headerText).toBe('My Team');
 });
+
+
+Then('user completes OTP verification', async function () {
+  // wait for a likely OTP input to appear before polling
+  await this.page.waitForSelector(
+    'input[name="otp"], input[id*="otp"], input[placeholder*="OTP"], input[placeholder*="One-time"], input[type="tel"]',
+    { state: 'visible', timeout: 15000 }
+  );
+
+  const otpService = new OTPService();
+  const otp = await otpService.pollOTP();
+
+  console.log(`OTP Retrieved: ${otp}`);
+
+  // try common OTP input selectors first
+  const otpSelectors = [
+    'input[name="otp"]',
+    'input[id*="otp"]',
+    'input[placeholder*="OTP"]',
+    'input[placeholder*="One-time"]',
+    'input[type="tel"]',
+  ];
+
+  let filled = false;
+  for (const sel of otpSelectors) {
+    const element = await this.page.$(sel);
+    if (element) {
+      await this.page.fill(sel, otp);
+      filled = true;
+      break;
+    }
+  }
+
+  // fallback to loginPageInstance.enterOTP if available at runtime
+  if (!filled && loginPageInstance && typeof (loginPageInstance as any).enterOTP === 'function') {
+    await (loginPageInstance as any).enterOTP(otp);
+  }
+});
+
